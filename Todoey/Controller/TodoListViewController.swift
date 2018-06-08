@@ -11,7 +11,8 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
 	var items = [Item]()
-	let defaults = UserDefaults.standard
+	//Filepath to the documents
+	let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -20,11 +21,11 @@ class TodoListViewController: UITableViewController {
 		let newItem = Item(name: "Find Mike")
 		items.append(newItem)
 		items.append(Item(name: "Buy Eggos"))
-		items.append(Item(name: "Destroy Demorgorgon"))
+		items.append(Item(name: "Destroy Demogorgon"))
 		
-		if let itemsOptional = defaults.array(forKey: "TodoListArray") as? [Item] {
-			items = itemsOptional
-		}
+//		if let itemsOptional = defaults.array(forKey: "TodoListArray") as? [Item] {
+//			items = itemsOptional
+//		}
 	}
 
 	//MARK: TableView Datasource Methods
@@ -53,12 +54,26 @@ class TodoListViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		toggleCheckmark(tableView, indexPath)
 		
+		writeItemsToDocuments()
+		
 		tableView.reloadData()
 		
 		tableView.deselectRow(at: indexPath, animated: true)
 	}
 	
 	//MARK: Add new items
+	
+	fileprivate func writeItemsToDocuments() {
+		let encoder = PropertyListEncoder()
+		
+		do {
+			let data = try encoder.encode(items)
+			try data.write(to: dataFilePath!)
+		}
+		catch {
+			print("Error encoding item array, \(error)")
+		}
+	}
 	
 	@IBAction func addButtonPressed(_ sender: Any) {
 		
@@ -70,7 +85,8 @@ class TodoListViewController: UITableViewController {
 			//what will happen once the user clicks the add item Button on our UIAlert
 			self.items.append(Item(name: textField.text!))
 			
-			self.defaults.set(self.items, forKey: "TodoListArray")
+			self.writeItemsToDocuments()
+			
 			self.tableView.reloadData()
 		}
 		
