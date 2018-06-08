@@ -45,7 +45,28 @@ class TodoListViewController: UITableViewController {
 		toggleCheckmark(tableView, indexPath)
 		
 		tableView.deselectRow(at: indexPath, animated: true)
-		
-		
 	}
+	
+	//MARK: Add new items
+	
+	@IBAction func addButtonPressed(_ sender: Any) {
+		
+		var textField = UITextField()
+		
+		let alert = UIAlertController(title: "Add new Todoey Item", message: "", preferredStyle: .alert)
+		
+		let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+			//what will happen once the user clicks the add item Button on our UIAlert
+			print(textField.text!)
+		}
+		
+		alert.addTextField { (alertTextField) in
+			alertTextField.placeholder = "Create new item"
+			textField = alertTextField
+		}
+		
+		alert.addAction(action)
+		present(alert, animated: true, completion: nil)
+	}
+	
 }
