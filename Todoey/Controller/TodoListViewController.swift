@@ -18,14 +18,12 @@ class TodoListViewController: UITableViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		let newItem = Item(name: "Find Mike")
-		items.append(newItem)
-		items.append(Item(name: "Buy Eggos"))
-		items.append(Item(name: "Destroy Demogorgon"))
+//		let newItem = Item(name: "Find Mike")
+//		items.append(newItem)
+//		items.append(Item(name: "Buy Eggos"))
+//		items.append(Item(name: "Destroy Demogorgon"))
 		
-//		if let itemsOptional = defaults.array(forKey: "TodoListArray") as? [Item] {
-//			items = itemsOptional
-//		}
+		loadItems()
 	}
 
 	//MARK: TableView Datasource Methods
@@ -72,6 +70,18 @@ class TodoListViewController: UITableViewController {
 		}
 		catch {
 			print("Error encoding item array, \(error)")
+		}
+	}
+	
+	func loadItems() {
+		do {
+			if let data = try? Data(contentsOf: dataFilePath!) {
+				let decoder = PropertyListDecoder()
+				items = try decoder.decode([Item].self, from: data)
+			}
+		}
+		catch {
+			print(error)
 		}
 	}
 	
