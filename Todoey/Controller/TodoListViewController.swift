@@ -17,7 +17,7 @@ class TodoListViewController: UITableViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		let newItem = Item(name: "Find Mike")		
+		let newItem = Item(name: "Find Mike")
 		items.append(newItem)
 		items.append(Item(name: "Buy Eggos"))
 		items.append(Item(name: "Destroy Demorgorgon"))
@@ -33,12 +33,9 @@ class TodoListViewController: UITableViewController {
 		let itemCell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
 		itemCell.textLabel?.text = items[indexPath.row].title
 		
-		if items[indexPath.row].done == true {
-			itemCell.accessoryType = .checkmark
-		}
-		else {
-			itemCell.accessoryType = .none
-		}
+		let item = items[indexPath.row]
+		
+		itemCell.accessoryType = item.done ? .checkmark : .none
 		
 		return itemCell
 	}
