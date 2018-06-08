@@ -22,9 +22,9 @@ class TodoListViewController: UITableViewController {
 		items.append(Item(name: "Buy Eggos"))
 		items.append(Item(name: "Destroy Demorgorgon"))
 		
-//		if let itemsOptional = defaults.array(forKey: "TodoListArray") as? [String] {
-//			items = itemsOptional
-//		}
+		if let itemsOptional = defaults.array(forKey: "TodoListArray") as? [Item] {
+			items = itemsOptional
+		}
 	}
 
 	//MARK: TableView Datasource Methods
