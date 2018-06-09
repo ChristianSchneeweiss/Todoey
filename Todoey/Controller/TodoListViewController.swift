@@ -7,21 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
 
 	var items = [Item]()
-	//Filepath to the documents
-	let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext		
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 		
-//		let newItem = Item(name: "Find Mike")
-//		items.append(newItem)
-//		items.append(Item(name: "Buy Eggos"))
-//		items.append(Item(name: "Destroy Demogorgon"))
 		
 		loadItems()
 	}
@@ -33,7 +30,7 @@ class TodoListViewController: UITableViewController {
 		itemCell.textLabel?.text = items[indexPath.row].title
 		
 		let item = items[indexPath.row]
-		
+
 		itemCell.accessoryType = item.done ? .checkmark : .none
 		
 		return itemCell
@@ -50,38 +47,36 @@ class TodoListViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		
+//		context.delete(items[indexPath.row])
+//		items.remove(at: indexPath.row)
+		
 		toggleCheckmark(tableView, indexPath)
+		saveItems()
 		
-		writeItemsToDocuments()
 		
-		tableView.reloadData()
-		
-		tableView.deselectRow(at: indexPath, animated: true)
+		tableView.deselectRow(at: indexPath, animated: false)
 	}
 	
 	//MARK: Add new items
 	
-	fileprivate func writeItemsToDocuments() {
-		let encoder = PropertyListEncoder()
-		
+	fileprivate func saveItems() {		
 		do {
-			let data = try encoder.encode(items)
-			try data.write(to: dataFilePath!)
+			try context.save()
 		}
 		catch {
-			print("Error encoding item array, \(error)")
+			print("Error saving context, \(error)")
 		}
+		self.tableView.reloadData()
 	}
 	
 	func loadItems() {
+		let request : NSFetchRequest<Item> = Item.fetchRequest()
 		do {
-			if let data = try? Data(contentsOf: dataFilePath!) {
-				let decoder = PropertyListDecoder()
-				items = try decoder.decode([Item].self, from: data)
-			}
+			items = try context.fetch(request)
 		}
 		catch {
-			print(error)
+			print("Error fetching data from context - \(error)")
 		}
 	}
 	
@@ -90,14 +85,15 @@ class TodoListViewController: UITableViewController {
 		var textField = UITextField()
 		
 		let alert = UIAlertController(title: "Add new Todoey Item", message: "", preferredStyle: .alert)
-		
 		let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
 			//what will happen once the user clicks the add item Button on our UIAlert
-			self.items.append(Item(name: textField.text!))
 			
-			self.writeItemsToDocuments()
+			let newItem = Item(context: self.context)
+			newItem.title = textField.text!
+			newItem.done = false
+			self.items.append(newItem)
 			
-			self.tableView.reloadData()
+			self.saveItems()
 		}
 		
 		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
