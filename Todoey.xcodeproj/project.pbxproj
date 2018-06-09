@@ -13,6 +13,7 @@
 		4E7EAC4620CA9C9500483DC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E7EAC4420CA9C9500483DC7 /* Main.storyboard */; };
 		4E7EAC4820CA9C9700483DC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E7EAC4720CA9C9700483DC7 /* Assets.xcassets */; };
 		4E7EAC4B20CA9C9700483DC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E7EAC4920CA9C9700483DC7 /* LaunchScreen.storyboard */; };
+		4E80C4D920CBF0FE00AE46D7 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E80C4D820CBF0FE00AE46D7 /* CategoryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		4E7EAC4720CA9C9700483DC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E7EAC4A20CA9C9700483DC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4E7EAC4C20CA9C9700483DC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E80C4D820CBF0FE00AE46D7 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryTableViewController.swift; path = Todoey/Controller/CategoryTableViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 		4E6A9A4D20CB178300B91876 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4E80C4D820CBF0FE00AE46D7 /* CategoryTableViewController.swift */,
 				4E7EAC4220CA9C9500483DC7 /* TodoListViewController.swift */,
 			);
 			path = Controller;
@@ -173,6 +176,7 @@
 				4E7EAC4320CA9C9500483DC7 /* TodoListViewController.swift in Sources */,
 				4E6A9A7320CB28BA00B91876 /* DataModel.xcdatamodeld in Sources */,
 				4E7EAC4120CA9C9500483DC7 /* AppDelegate.swift in Sources */,
+				4E80C4D920CBF0FE00AE46D7 /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
