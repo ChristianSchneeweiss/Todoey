@@ -8,11 +8,13 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
 
 	var items : Results<Item>?
 	let realm = try! Realm()
+	@IBOutlet weak var searchBar: UISearchBar!
 	
 	var selectedCategory : Category? {
 		didSet{
@@ -23,6 +25,28 @@ class TodoListViewController: SwipeTableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		
+		tableView.separatorStyle = .none
+		}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		title = selectedCategory!.name
+		updateNavBar(withHexCode: selectedCategory!.colorInHex!)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		updateNavBar(withHexCode: "1D9BF6")
+	}
+	
+	//MARK: NavBar Setup
+	
+	func updateNavBar(withHexCode colorHex : String) {
+		guard let navBar = navigationController?.navigationBar else { fatalError("NavBar is not created")}
+		navBar.barTintColor = UIColor(hexString: colorHex)
+		
+		navBar.tintColor = UIColor.init(contrastingBlackOrWhiteColorOn: UIColor(hexString: colorHex), isFlat: true)
+		navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.init(contrastingBlackOrWhiteColorOn: UIColor(hexString: colorHex), isFlat: true)]
+		searchBar.barTintColor = UIColor(hexString: colorHex)
 	}
 
 	//MARK: TableView Datasource Methods
@@ -33,6 +57,11 @@ class TodoListViewController: SwipeTableViewController {
 		if let item = items?[indexPath.row] {
 			itemCell.textLabel?.text = item.title
 			itemCell.accessoryType = item.done ? .checkmark : .none
+			
+			if let color = UIColor(hexString: selectedCategory!.colorInHex)?.darken(byPercentage: CGFloat(Double(indexPath.row)/Double(items!.count))) {
+				itemCell.backgroundColor = color
+				itemCell.textLabel?.textColor = UIColor.init(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+			}
 		}
 		else {
 			itemCell.textLabel?.text = "No Items added"
@@ -111,7 +140,7 @@ class TodoListViewController: SwipeTableViewController {
 		if let itemToDelete = items?[indexPath.row] {
 			do {
 				try self.realm.write {
-					try self.realm.delete(itemToDelete)
+					self.realm.delete(itemToDelete)
 				}
 			}
 			catch {

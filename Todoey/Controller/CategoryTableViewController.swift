@@ -37,8 +37,10 @@ class CategoryTableViewController: SwipeTableViewController {
 
 		
 		cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
+		
 		if let hexColor = categories?[indexPath.row].colorInHex {
 			cell.backgroundColor = UIColor(hexString: hexColor)
+			cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: UIColor(hexString: hexColor), isFlat: true)
 		}
 		else {
 			let randomColorHex = UIColor.randomFlat().hexValue()
@@ -50,6 +52,7 @@ class CategoryTableViewController: SwipeTableViewController {
 			catch {
 				print("Error while setting color for category, \(error)")
 			}
+			cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: UIColor(hexString: randomColorHex), isFlat: true)
 			cell.backgroundColor = UIColor(hexString: randomColorHex)
 				
 		}
@@ -121,7 +124,7 @@ class CategoryTableViewController: SwipeTableViewController {
 			let destinationVC = segue.destination as! TodoListViewController
 			
 			if let indexPath = tableView.indexPathForSelectedRow {
-				destinationVC.selectedCategory = categories?[indexPath.row]
+				destinationVC.selectedCategory = categories?[indexPath.row]				
 			}
 		}
 	}
