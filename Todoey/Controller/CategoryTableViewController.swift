@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryTableViewController: SwipeTableViewController {
 
@@ -24,7 +25,9 @@ class CategoryTableViewController: SwipeTableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 		
-		loadCategories()				
+		loadCategories()
+		
+		tableView.separatorStyle = .none
     }
 	
 	//MARK: TableView Datasource Methods
@@ -34,6 +37,22 @@ class CategoryTableViewController: SwipeTableViewController {
 
 		
 		cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
+		if let hexColor = categories?[indexPath.row].colorInHex {
+			cell.backgroundColor = UIColor(hexString: hexColor)
+		}
+		else {
+			let randomColorHex = UIColor.randomFlat().hexValue()
+			do {
+				try realm.write {
+					categories?[indexPath.row].colorInHex = randomColorHex
+				}
+			}
+			catch {
+				print("Error while setting color for category, \(error)")
+			}
+			cell.backgroundColor = UIColor(hexString: randomColorHex)
+				
+		}
 		return cell
 	}
 	
